@@ -9,7 +9,6 @@
     tools:layout_editor_absoluteY="81dp">
 
 
-
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -102,8 +101,8 @@
             android:id="@+id/currLocRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:checked="true"
             android:layout_weight="1"
-            andro
             android:text="Current location" />
 
         <RadioButton
@@ -120,7 +119,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="13dp"
         android:layout_marginStart="13dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="75dp"
         android:text="Clear"
         app:layout_constraintStart_toEndOf="@+id/searchButton"
         app:layout_constraintTop_toBottomOf="@+id/autocompLoc" />
@@ -131,7 +130,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="75dp"
         android:onClick="nearbyPlacesSearch"
         android:text="Search"
         app:layout_constraintStart_toStartOf="parent"

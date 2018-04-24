@@ -1,6 +1,7 @@
 package com.example.prarthana.travelapp;
 
 import android.app.DownloadManager;
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -43,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
 
     static List<String> spinnerOptions = new ArrayList<>(asList("Default", "Airport", "Amusement Park", "Aquarium", "Art Gallery", "Bakery", "Bar", "Beauty Salon", "Bowling Alley", "Bus Station", "Cafe", "Campground", "Car Rental", "Casino" , "Lodging", "Movie Theater", "Museum", "Night Club", "Parking", "Restaurant", "Shopping Mall", "Stadium", "Subway Station", "Taxi Station", "Train Station", "Transit Station","Travel Agency", "Zoo"));
     static public String selectedCategory = "default";
+
+    public static final String NEARBY_PLACES = "com.example.prarthana.NEARBYPLACES";
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -172,6 +175,9 @@ public class MainActivity extends AppCompatActivity {
                                     // Display the first 500 characters of the response string.
 //                                    mTextView.setText("Response is: "+ response.substring(0,500));
                                     Log.d("VolleyResponse", response);
+                                    Intent intent = new Intent(getActivity(), ResultsTable.class);
+                                    intent.putExtra(NEARBY_PLACES, response);
+                                    startActivity(intent);
                                 }
                             }, new Response.ErrorListener() {
                         @Override
@@ -184,11 +190,7 @@ public class MainActivity extends AppCompatActivity {
                     // Add the request to the RequestQueue.
                     queue.add(stringRequest);
 
-//                    Intent intent = new Intent(this, DisplayMessageActivity.class);
-//                    EditText editText = (EditText) findViewById(R.id.editText);
-//                    String message = editText.getText().toString();
-//                    intent.putExtra(EXTRA_MESSAGE, message);
-//                    startActivity(intent);
+
                     // Code here executes on main thread after user presses button
                 }
             });
