@@ -1,5 +1,7 @@
 package com.example.prarthana.travelapp;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,9 +35,14 @@ import static com.example.prarthana.travelapp.MainActivity.selectedCategory;
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> {
 
     List<Person> resultsList;
+    Context fromContext;
 
-    RVAdapter(List<Person> allPlaces) {
+    public static final String SELECTED_PLACE = "com.example.prarthana.SELECTEDPLACE";
+
+
+    RVAdapter(List<Person> allPlaces, Context context) {
         this.resultsList = allPlaces;
+        this.fromContext = context;
     }
 
     public static class PersonViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -43,48 +50,48 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
         TextView personName;
         TextView personAge;
         ImageView personPhoto;
+        Context innerFromContext;
+        String placeId;
 
-        PersonViewHolder(View itemView) {
+        PersonViewHolder(View itemView, Context fromContext, String placeid) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
             cv.setOnClickListener(this);
             personName = (TextView) itemView.findViewById(R.id.person_name);
             personAge = (TextView) itemView.findViewById(R.id.person_age);
             personPhoto = (ImageView) itemView.findViewById(R.id.person_photo);
+            innerFromContext = fromContext;
+            placeId = placeid;
         }
 
         @Override
         public void onClick(View view)
         {
-//            final RequestQueue queue = Volley.newRequestQueue(this);
-            Log.d("clicked:", "clicked");
-            Log.d("clicked on:", String.valueOf(getAdapterPosition()));
-//            String url ="http://travelyellowpages.us-east-2.elasticbeanstalk.com/nearbyPlaces?keyword=" + keyword + "&category=" + selectedCategory + "&distance=" + distance + "&hereLatitude=34.0266&hereLongitude=-118.2831";
-//            Log.d("request : ", url);
-//            // Request a string response from the provided URL.
-//            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-//                    new Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String response) {
-//                            // Display the first 500 characters of the response string.
-////                                    mTextView.setText("Response is: "+ response.substring(0,500));
-//                            Log.d("VolleyResponseDETAILS", response);
-////                            Intent intent = new Intent(getActivity(), ResultsTable.class);
-////                            intent.putExtra(NEARBY_PLACES, response);
-////                            startActivity(intent);
-//                        }
-//                    }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-////                            mTextView.setText("That didn't work!");
-//                    Log.d("VolleyError", "error");
-//                }
-//            });
-//
-//            // Add the request to the RequestQueue.
-//            queue.add(stringRequest);
+            Integer pos = getAdapterPosition();
+            String placeid = placeId;
+            final RequestQueue queue = Volley.newRequestQueue(innerFromContext);
 
+            String url ="http://travelyellowpages.us-east-2.elasticbeanstalk.com/placeDetails?placeid=" + placeid;
+            Log.d("request : ", url);
+            // Request a string response from the provided URL.
+            StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            Log.d("VolleyResponse", response);
+                            Intent intent = new Intent(innerFromContext, ShowDetails.class);
+                            intent.putExtra(SELECTED_PLACE, response);
+                            innerFromContext.startActivity(intent);
+                        }
+                        }, new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.d("VolleyError", "error");
+                        }
+                    });
 
+                    // Add the request to the RequestQueue.
+            queue.add(stringRequest);
         }
     }
 
@@ -96,7 +103,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder> 
     @Override
     public PersonViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.result_card, viewGroup, false);
-        PersonViewHolder pvh = new PersonViewHolder(v);
+        PersonViewHolder pvh = new PersonViewHolder(v, fromContext, resultsList.get(i).getPlaceid());
         return pvh;
     }
 

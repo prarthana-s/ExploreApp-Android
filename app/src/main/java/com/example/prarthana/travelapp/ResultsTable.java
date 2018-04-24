@@ -70,7 +70,7 @@ public class ResultsTable extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        RVAdapter adapter = new RVAdapter(places);
+        RVAdapter adapter = new RVAdapter(places, this);
         rv.setAdapter(adapter);
     }
 
