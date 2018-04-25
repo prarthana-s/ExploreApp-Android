@@ -16,22 +16,22 @@
             android:padding="16dp">
 
             <TextView
-                android:id="@+id/person_name"
+                android:id="@+id/place_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/person_photo"
-                android:layout_toRightOf="@+id/person_photo"
+                android:layout_alignTop="@+id/place_photo"
+                android:layout_toRightOf="@+id/place_photo"
                 android:textSize="30sp" />
 
             <TextView
-                android:id="@+id/person_age"
+                android:id="@+id/place_address"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/person_photo"
-                android:layout_below="@+id/person_name" />
+                android:layout_toRightOf="@+id/place_photo"
+                android:layout_below="@+id/place_name" />
 
             <ImageView
-                android:id="@+id/person_photo"
+                android:id="@+id/place_photo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"

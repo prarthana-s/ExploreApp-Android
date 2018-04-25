@@ -50,7 +50,7 @@ public class ResultsTable extends AppCompatActivity {
         String nearby_places_str = intent.getStringExtra(MainActivity.NEARBY_PLACES);
 
         JSONObject reader = null;
-        List<Person> places = new ArrayList<>();
+        List<nearbyPlace> places = new ArrayList<>();
 
         try {
             reader = new JSONObject(nearby_places_str);
@@ -63,7 +63,7 @@ public class ResultsTable extends AppCompatActivity {
                 String vicinity = c.getString("vicinity");
                 String placeid = c.getString("place_id");
 
-                places.add(new Person(icon, name, vicinity, placeid));
+                places.add(new nearbyPlace(icon, name, vicinity, placeid));
 
             }
             } catch (JSONException e) {
