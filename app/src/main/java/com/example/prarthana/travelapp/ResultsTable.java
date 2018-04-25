@@ -27,7 +27,6 @@ import java.util.List;
 
 public class ResultsTable extends AppCompatActivity {
 
-
     private RecyclerView rv;
 
     @Override

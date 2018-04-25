@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +24,9 @@ import com.google.android.gms.tasks.Task;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class TabFragment2 extends Fragment {
@@ -31,9 +36,18 @@ public class TabFragment2 extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View photosView =  inflater.inflate(R.layout.fragment_tab_fragment2, container, false);
-
+        final View photosView =  inflater.inflate(R.layout.fragment_tab_fragment2, container, false);
+        String place_id = null;
         String selectedPlace = getArguments().getString("data");
+
+        JSONObject reader = null;
+        try {
+            reader = new JSONObject(selectedPlace);
+            JSONObject results = (JSONObject) reader.get("result");
+            place_id = results.getString("place_id");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         // Construct a GeoDataClient.
         mGeoDataClient = Places.getGeoDataClient(getActivity());
@@ -41,16 +55,17 @@ public class TabFragment2 extends Fragment {
         // Construct a PlaceDetectionClient.
         mPlaceDetectionClient = Places.getPlaceDetectionClient(getActivity());
 
-        getPhotos();
+        getPhotos(photosView, place_id);
 
 
         return photosView;
     }
 
     // Request photos and metadata for the specified place.
-    private void getPhotos() {
-        final ArrayList<Bitmap> photosContainer = new ArrayList<Bitmap>();
-        final String placeId = "ChIJa147K9HX3IAR-lwiGIQv9i4";
+    private void getPhotos(final View photosViewRef, String place_id) {
+        final ArrayList<Photo> photosContainer = new ArrayList<>();
+
+        final String placeId = place_id;
         final Task<PlacePhotoMetadataResponse> photoMetadataResponse = mGeoDataClient.getPlacePhotos(placeId);
         photoMetadataResponse.addOnCompleteListener(new OnCompleteListener<PlacePhotoMetadataResponse>() {
             @Override
@@ -74,10 +89,17 @@ public class TabFragment2 extends Fragment {
                             PlacePhotoResponse photo = task.getResult();
                             Bitmap bitmap = photo.getBitmap();
                             Log.d("finished", "done!");
-                            photosContainer.add(bitmap);
+                            photosContainer.add(new Photo(bitmap));
 
                             if (photosContainer.size() == numPhotos) {
-                                Log.d("ALL DONE", "OKAY");
+                                RecyclerView rv = (RecyclerView) photosViewRef.findViewById(R.id.photosRV);
+
+                                final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+                                layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+                                rv.setLayoutManager(layoutManager);
+
+                                photosRVAdapter adapter = new photosRVAdapter(photosContainer, photosViewRef);
+                                rv.setAdapter(adapter);
                             }
 
                         }

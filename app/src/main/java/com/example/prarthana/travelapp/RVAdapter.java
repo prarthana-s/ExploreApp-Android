@@ -59,7 +59,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.nearbyPlaceViewHol
             cv.setOnClickListener(this);
             placeName = (TextView) itemView.findViewById(R.id.place_name);
             placeAddress = (TextView) itemView.findViewById(R.id.place_address);
-            placePhoto = (ImageView) itemView.findViewById(R.id.place_photo);
+            placePhoto = (ImageView) itemView.findViewById(R.id.place_icon);
             innerFromContext = fromContext;
             placeId = placeid;
         }
