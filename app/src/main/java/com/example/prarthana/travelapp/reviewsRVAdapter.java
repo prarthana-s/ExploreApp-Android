@@ -85,7 +85,7 @@ public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.revi
         reviewsViewHolder.reviewUserRating.setText(reviewsList.get(i).getRating());
 
         String timestamp = reviewsList.get(i).getTimestamp();
-        if (ShowAllDetails.selectedCategory == "Google Reviews") {
+        if (selectedCategory == "Google Reviews") {
             Date date = new Date(Long.parseLong(timestamp) * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
             String formattedDate = sdf.format(date);
