@@ -31,18 +31,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import static com.example.prarthana.travelapp.MainActivity.NEARBY_PLACES;
-import static com.example.prarthana.travelapp.MainActivity.selectedCategory;
-
-
 public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.reviewsViewHolder> {
 
     List<Review> reviewsList;
     Context fromContext;
+    String selectedCategory;
 
-    reviewsRVAdapter(List<Review> allReviews, Context context) {
+    reviewsRVAdapter(List<Review> allReviews, Context context, String selectedCategory) {
         this.reviewsList = allReviews;
         this.fromContext = context;
+        this.selectedCategory = selectedCategory;
     }
 
     public static class reviewsViewHolder extends RecyclerView.ViewHolder {
@@ -85,6 +83,7 @@ public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.revi
         reviewsViewHolder.reviewUserRating.setText(reviewsList.get(i).getRating());
 
         String timestamp = reviewsList.get(i).getTimestamp();
+//        Log.d("selected cat:", selectedCategory);
         if (selectedCategory == "Google Reviews") {
             Date date = new Date(Long.parseLong(timestamp) * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);

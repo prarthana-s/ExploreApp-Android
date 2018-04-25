@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TabFragment4 extends Fragment {
@@ -47,6 +49,9 @@ public class TabFragment4 extends Fragment {
 
         final List<Review> googleReviews = new ArrayList<>();
         final List<Review> yelpReviews = new ArrayList<>();
+
+        final List<Review> sortedGoogleReviews = new ArrayList<>();
+        final List<Review> sortedYelpReviews = new ArrayList<>();
 
         JSONObject reader = null;
         JSONArray allGoogleReviews = null;
@@ -70,12 +75,22 @@ public class TabFragment4 extends Fragment {
                 selectedCategory =  parent.getItemAtPosition(position).toString();
                 if (selectedCategory.equals("Google Reviews") == true) {
                     if (googleFlag == true) {
-                        callAdapter(reviewsView, googleReviews);
+                        if (selectedSort == "Default Sort") {
+                            callAdapter(reviewsView, googleReviews);
+                        }
+                        else{
+                            callAdapter(reviewsView, sortedGoogleReviews);
+                        }
                     }
                 }
                 else {
                     if (yelpFlag == true) {
-                        callAdapter(reviewsView, yelpReviews);
+                        if (selectedSort == "Default Sort") {
+                            callAdapter(reviewsView, yelpReviews);
+                        }
+                        else{
+                            callAdapter(reviewsView, sortedYelpReviews);
+                        }
                     }
                 }
             }
@@ -109,6 +124,100 @@ public class TabFragment4 extends Fragment {
                 selectedSort=  parent.getItemAtPosition(position).toString();
 //                callAdapter(reviewsView,reviews);
                 Log.d("SELECTED SORT:", selectedSort.toString());
+
+                if (selectedSort.equals("Default Order")) {
+                    if (selectedCategory == "Google Reviews") {
+                        callAdapter(reviewsView, googleReviews);
+                    }
+                    else {
+                        callAdapter(reviewsView, yelpReviews);
+                    }
+                }
+                else if (selectedSort.equals("Highest Rating")) {
+                    Collections.sort(sortedGoogleReviews, new Comparator<Review>() {
+                        @Override
+                        public int compare(Review obj1, Review obj2) {
+                            return obj2.getRating().compareTo(obj1.getRating());
+                        }
+                    });
+                    Collections.sort(sortedYelpReviews, new Comparator<Review>() {
+                        @Override
+                        public int compare(Review obj1, Review obj2) {
+                            return obj2.getRating().compareTo(obj1.getRating());
+                        }
+                    });
+
+                    if (selectedCategory == "Google Reviews") {
+                        callAdapter(reviewsView, sortedGoogleReviews);
+                    }
+                    else {
+                        callAdapter(reviewsView, sortedYelpReviews);
+                    }
+                }
+                else if (selectedSort.equals("Lowest Rating")) {
+                    Collections.sort(sortedGoogleReviews, new Comparator<Review>() {
+                        @Override
+                        public int compare(Review obj1, Review obj2) {
+                            return obj1.getRating().compareTo(obj2.getRating());
+                        }
+                    });
+                    Collections.sort(sortedYelpReviews, new Comparator<Review>() {
+                        @Override
+                        public int compare(Review obj1, Review obj2) {
+                            return obj1.getRating().compareTo(obj2.getRating());
+                        }
+                    });
+
+                    if (selectedCategory == "Google Reviews") {
+                        callAdapter(reviewsView, sortedGoogleReviews);
+                    }
+                    else {
+                        callAdapter(reviewsView, sortedYelpReviews);
+                    }
+                }
+                else if (selectedSort.equals("Most Recent")) {
+                    Collections.sort(sortedGoogleReviews, new Comparator<Review>() {
+                        @Override
+                        public int compare(Review obj1, Review obj2) {
+                            return obj2.getTimestamp().compareTo(obj1.getTimestamp());
+                        }
+                    });
+                    Collections.sort(sortedYelpReviews, new Comparator<Review>() {
+                        @Override
+                        public int compare(Review obj1, Review obj2) {
+                            return obj2.getTimestamp().compareTo(obj1.getTimestamp());
+                        }
+                    });
+
+                    if (selectedCategory == "Google Reviews") {
+                        callAdapter(reviewsView, sortedGoogleReviews);
+                    }
+                    else {
+                        callAdapter(reviewsView, sortedYelpReviews);
+                    }
+                }
+                else if (selectedSort.equals("Least Recent")) {
+                    Collections.sort(sortedGoogleReviews, new Comparator<Review>() {
+                        @Override
+                        public int compare(Review obj1, Review obj2) {
+                            return obj1.getTimestamp().compareTo(obj2.getTimestamp());
+                        }
+                    });
+                    Collections.sort(sortedYelpReviews, new Comparator<Review>() {
+                        @Override
+                        public int compare(Review obj1, Review obj2) {
+                            return obj1.getTimestamp().compareTo(obj2.getTimestamp());
+                        }
+                    });
+
+                    if (selectedCategory == "Google Reviews") {
+                        callAdapter(reviewsView, sortedGoogleReviews);
+                    }
+                    else {
+                        callAdapter(reviewsView, sortedYelpReviews);
+                    }
+                }
+
             }
 
             @Override
@@ -134,6 +243,7 @@ public class TabFragment4 extends Fragment {
                 String reviewBody = review.getString("text");
 
                 googleReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody));
+                sortedGoogleReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody));
             }
 
             googleFlag = true;
@@ -215,6 +325,7 @@ public class TabFragment4 extends Fragment {
                                     String reviewBody = review.getString("text");
 
                                     yelpReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody));
+                                    sortedYelpReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -255,7 +366,8 @@ public class TabFragment4 extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         rv.setLayoutManager(layoutManager);
 
-        reviewsRVAdapter adapter = new reviewsRVAdapter(reviews, getActivity());
+        reviewsRVAdapter adapter = new reviewsRVAdapter(reviews, getActivity(), selectedCategory);
         rv.setAdapter(adapter);
     }
+
 }
