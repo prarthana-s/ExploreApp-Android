@@ -1,11 +1,14 @@
 package com.example.prarthana.travelapp;
 
+import android.animation.FloatArrayEvaluator;
+import android.media.Rating;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.example.prarthana.travelapp.R;
@@ -24,7 +27,6 @@ public class TabFragment1 extends Fragment {
         View infoView =  inflater.inflate(R.layout.fragment_tab_fragment1, container, false);
         String selectedPlace = getArguments().getString("data");
         Log.d("data", selectedPlace);
-
 
         JSONObject reader = null;
 
@@ -45,8 +47,9 @@ public class TabFragment1 extends Fragment {
             priceValue.setText(price);
 
             String rating = results.getString("rating");
-            TextView ratingValue = (TextView) infoView.findViewById(R.id.infoRatingData);
-            ratingValue.setText(rating);
+            float ratingFloat = Float.parseFloat(rating);
+            RatingBar ratingBar = (RatingBar) infoView.findViewById(R.id.infoRatingBar);
+            ratingBar.setRating(ratingFloat);
 
             String google = results.getString("url");
             TextView googleValue = (TextView) infoView.findViewById(R.id.infoGoogleData);

@@ -98,7 +98,7 @@ public class TabFragment2 extends Fragment {
                                 layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
                                 rv.setLayoutManager(layoutManager);
 
-                                photosRVAdapter adapter = new photosRVAdapter(photosContainer, photosViewRef);
+                                photosRVAdapter adapter = new photosRVAdapter(photosContainer);
                                 rv.setAdapter(adapter);
                             }
 

@@ -37,7 +37,7 @@ public class photosRVAdapter extends RecyclerView.Adapter<photosRVAdapter.photos
 
     List<Photo> photosList;
 
-    photosRVAdapter(ArrayList<Photo> allPhotos, View photosViewRef) {
+    photosRVAdapter(ArrayList<Photo> allPhotos) {
         this.photosList = allPhotos;
     }
 

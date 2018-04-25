@@ -13,6 +13,9 @@ import android.view.MenuItem;
 
 public class ShowAllDetails extends AppCompatActivity {
 
+    static public String selectedCategory = "Google Reviews";
+    static public String selectedSort = "Default Sort";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,8 +30,8 @@ public class ShowAllDetails extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("INFO"));
         tabLayout.addTab(tabLayout.newTab().setText("PHOTOS"));
-        tabLayout.addTab(tabLayout.newTab().setText("REVIEWS"));
         tabLayout.addTab(tabLayout.newTab().setText("MAPS"));
+        tabLayout.addTab(tabLayout.newTab().setText("REVIEWS"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
