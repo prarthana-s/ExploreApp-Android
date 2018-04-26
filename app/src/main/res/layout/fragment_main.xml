@@ -22,9 +22,10 @@
     <EditText
         android:id="@+id/keywordValue"
         android:layout_width="346dp"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="34dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
         android:contentDescription="Enter keyword"
         android:ems="10"
         android:inputType="textPersonName"
@@ -37,7 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:text="Category"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/keywordValue" />
@@ -93,7 +94,7 @@
         android:layout_height="52dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView4">
 
@@ -101,8 +102,8 @@
             android:id="@+id/currLocRadio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:layout_weight="1"
+            android:checked="true"
             android:text="Current location" />
 
         <RadioButton
@@ -117,9 +118,9 @@
         android:id="@+id/clearButton"
         android:layout_width="174dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="50dp"
         android:text="Clear"
         app:layout_constraintStart_toEndOf="@+id/searchButton"
         app:layout_constraintTop_toBottomOf="@+id/autocompLoc" />
@@ -128,9 +129,9 @@
         android:id="@+id/searchButton"
         android:layout_width="173dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="75dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="50dp"
         android:onClick="nearbyPlacesSearch"
         android:text="Search"
         app:layout_constraintStart_toStartOf="parent"
@@ -153,10 +154,33 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="48dp"
         android:layout_marginStart="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="12dp"
         android:hint="Type in the Location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/locRadioGroup"
-        app:pacv_googleMapsApiKey="AIzaSyANFqTMYqnjkhbs9BQ5BYdd8zc2RtvzcFc"/>
+        app:pacv_googleMapsApiKey="AIzaSyANFqTMYqnjkhbs9BQ5BYdd8zc2RtvzcFc" />
+
+    <TextView
+        android:id="@+id/keywordError"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:text="Please enter mandatory field."
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+    <TextView
+        android:id="@+id/locEroor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:text="Please enter mandatory field."
+        android:visibility="invisible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/locRadioGroup" />
 
 </android.support.constraint.ConstraintLayout>

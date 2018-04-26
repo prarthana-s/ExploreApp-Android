@@ -167,10 +167,10 @@ public class MainActivity extends AppCompatActivity {
             Button searchButton = (Button) rootView.findViewById(R.id.searchButton);
             Button clearButton = (Button) rootView.findViewById(R.id.clearButton);
             final EditText keywordValue = (EditText) rootView.findViewById(R.id.keywordValue);
-//            Spinner categoryValue = (Spinner) rootView.findViewById(R.id.categoryValue);
+            final Spinner categoryValue = (Spinner) rootView.findViewById(R.id.categoryValue);
             final EditText distanceValue = (EditText) rootView.findViewById(R.id.distanceValue);
-//            RadioGroup locationRadio = (RadioGroup) rootView.findViewById(R.id.locRadioGroup);
-//            EditText customLocText = (EditText) rootView.findViewById(R.id.autocompLoc);
+            final RadioGroup locationRadio = (RadioGroup) rootView.findViewById(R.id.locRadioGroup);
+            final EditText customLocText = (EditText) rootView.findViewById(R.id.autocompLoc);
 
             searchFromLoc = rootView.findViewById(R.id.autocompLoc);
             searchFromLoc.setResultType(AutocompleteResultType.GEOCODE) ;
@@ -247,6 +247,19 @@ public class MainActivity extends AppCompatActivity {
 
                     // Add the request to the RequestQueue.
                     queue.add(stringRequest);
+                }
+            });
+
+            clearButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    keywordValue.setText("");
+                    categoryValue.setSelection(0);
+                    distanceValue.setText("");
+                    customLocText.setText("");
+                    customLocText.clearFocus();
+                    locationRadio.clearCheck();
+                    locationRadio.check(R.id.currLocRadio);
                 }
             });
 
