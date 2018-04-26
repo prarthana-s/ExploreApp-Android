@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,7 +50,7 @@ public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.revi
         CardView cv;
         ImageView reviewUserIcon;
         TextView reviewUserName;
-        TextView reviewUserRating;
+        RatingBar reviewUserRating;
         TextView reviewTime;
         TextView reviewBody;
         Context fromInnerContext;
@@ -61,7 +62,7 @@ public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.revi
             cv.setOnClickListener(this);
             reviewUserIcon = (ImageView) itemView.findViewById(R.id.review_icon);
             reviewUserName = (TextView) itemView.findViewById(R.id.review_name);
-            reviewUserRating = (TextView) itemView.findViewById(R.id.review_rating);
+            reviewUserRating = (RatingBar) itemView.findViewById(R.id.review_rating);
             reviewTime = (TextView) itemView.findViewById(R.id.review_time);
             reviewBody = (TextView) itemView.findViewById(R.id.review_body);
             fromInnerContext = fromContext;
@@ -90,7 +91,7 @@ public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.revi
     @Override
     public void onBindViewHolder(reviewsViewHolder reviewsViewHolder, int i) {
         reviewsViewHolder.reviewUserName.setText(reviewsList.get(i).getName());
-        reviewsViewHolder.reviewUserRating.setText(reviewsList.get(i).getRating());
+        reviewsViewHolder.reviewUserRating.setRating(Float.parseFloat(reviewsList.get(i).getRating()));
 
         String timestamp = reviewsList.get(i).getTimestamp();
         if (selectedCategory == "Google Reviews") {

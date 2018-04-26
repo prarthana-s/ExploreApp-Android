@@ -19,32 +19,35 @@
                 android:id="@+id/review_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:layout_alignParentStart="true"
                 android:layout_alignTop="@+id/review_icon"
-                android:layout_toRightOf="@+id/review_icon"
+                android:layout_marginStart="99dp"
                 android:text="review_rating" />
 
-            <TextView
+            <RatingBar
                 android:id="@+id/review_rating"
+                style="?android:attr/ratingBarStyleSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/review_name"
-                android:layout_toRightOf="@+id/review_icon"
-                android:text="review_rating" />
+                android:layout_alignStart="@+id/review_name"
+                android:layout_below="@+id/review_name" />
 
             <TextView
                 android:id="@+id/review_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/review_name"
                 android:layout_below="@+id/review_rating"
-                android:layout_toRightOf="@+id/review_icon"
                 android:text="review_time" />
 
             <TextView
                 android:id="@+id/review_body"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/review_name"
                 android:layout_below="@+id/review_time"
-                android:layout_toRightOf="@+id/review_icon"
                 android:text="review_body" />
 
             <ImageView
@@ -54,9 +57,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:adjustViewBounds="false"
-                android:maxWidth="50dp"
                 app:srcCompat="@mipmap/ic_launcher" />
+
 
         </RelativeLayout>
 
