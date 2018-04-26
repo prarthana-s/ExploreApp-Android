@@ -9,7 +9,11 @@
         android:id="@+id/fromLocAutocomplete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:pacv_googleMapsApiKey="AIzaSyANFqTMYqnjkhbs9BQ5BYdd8zc2RtvzcFc"/>
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="41dp"
+        android:hint="Type in the location"
+        app:pacv_googleMapsApiKey="AIzaSyANFqTMYqnjkhbs9BQ5BYdd8zc2RtvzcFc" />
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -35,6 +39,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="74dp" />
+        android:layout_marginTop="101dp" />
 
 </RelativeLayout>

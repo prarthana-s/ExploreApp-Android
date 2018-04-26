@@ -43,8 +43,9 @@ public class TabFragment1 extends Fragment {
             phoneValue.setText(phone);
 
             String price = results.getString("price_level");
+            String priceView = convertPriceToDollars(price);
             TextView priceValue = (TextView) infoView.findViewById(R.id.infoPriceData);
-            priceValue.setText(price);
+            priceValue.setText(priceView);
 
             String rating = results.getString("rating");
             float ratingFloat = Float.parseFloat(rating);
@@ -65,5 +66,26 @@ public class TabFragment1 extends Fragment {
 
 
         return infoView;
+    }
+
+    private String convertPriceToDollars(String price) {
+        Integer intPrice = Integer.parseInt(price);
+
+        if (intPrice >= 0 && intPrice < 1) {
+            return "0";
+        }
+        else if (intPrice >= 1 && intPrice < 2) {
+            return "$";
+        }
+        else if (intPrice >= 2 && intPrice < 3) {
+            return "$$";
+        }
+        else if (intPrice >= 3 && intPrice < 4) {
+            return "$$$";
+        }
+        else {
+            return "$$$$";
+        }
+
     }
 }

@@ -27,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -172,6 +173,11 @@ public class MainActivity extends AppCompatActivity {
             final RadioGroup locationRadio = (RadioGroup) rootView.findViewById(R.id.locRadioGroup);
             final EditText customLocText = (EditText) rootView.findViewById(R.id.autocompLoc);
 
+            final RadioButton otherLocRadio = (RadioButton) rootView.findViewById(R.id.otherLocRadio);
+
+            final TextView keywordError = (TextView) rootView.findViewById(R.id.keywordError);
+            final TextView otherLocError = (TextView) rootView.findViewById(R.id.locError);
+
             searchFromLoc = rootView.findViewById(R.id.autocompLoc);
             searchFromLoc.setResultType(AutocompleteResultType.GEOCODE) ;
             searchFromLoc.setLocationBiasEnabled(true);
@@ -203,50 +209,77 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-                    final ProgressDialog pd = new ProgressDialog(getActivity());
-
-                    // Set progress dialog style spinner
-                    pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-
-                    // Set the progress dialog title and message
-                    pd.setMessage("Fetching results");
-
-                    // Set the progress dialog background color
-                    pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD4D9D0")));
-
-                    pd.setIndeterminate(false);
-
-                    // Finally, show the progress dialog
-                    pd.show();
+                    Boolean validForm = false;
 
                     String keyword = keywordValue.getText().toString();
-                    String distance = distanceValue.getText().toString();
-                    String url ="http://travelyellowpages.us-east-2.elasticbeanstalk.com/nearbyPlaces?keyword=" + keyword + "&category=" + selectedCategory + "&distance=" + distance + "&hereLatitude=" + lat +  "&hereLongitude=" + lng;
-                    Log.d("request : ", url);
-                    // Request a string response from the provided URL.
-                    StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
-                            new Response.Listener<String>() {
-                                @Override
-                                public void onResponse(String response) {
-                                    // Display the first 500 characters of the response string.
-//                                    mTextView.setText("Response is: "+ response.substring(0,500));
-                                    Log.d("VolleyResponse", response);
-                                    Intent intent = new Intent(getActivity(), ResultsTable.class);
-                                    intent.putExtra(NEARBY_PLACES, response);
+                    if (keyword.trim().length() > 0) {
+                        validForm = true;
+                        keywordError.setVisibility(View.GONE);
+                    } else {
+                        validForm = false;
+                        keywordError.setTextColor(Color.parseColor("#FF0000"));
+                        keywordError.setVisibility(View.VISIBLE);
 
-                                    pd.dismiss();
-                                    startActivity(intent);
-                                }
-                            }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-//                            mTextView.setText("That didn't work!");
-                            Log.d("VolleyError", "error");
+                    }
+
+                    if (otherLocRadio.isChecked()) {
+                        String enteredLoc = customLocText.getText().toString();
+                        if (enteredLoc.trim().length() > 0) {
+                            validForm = true;
+                            otherLocError.setVisibility(View.GONE);
+                        } else {
+                            validForm = false;
+                            otherLocError.setTextColor(Color.parseColor("#FF0000"));
+                            otherLocError.setVisibility(View.VISIBLE);
                         }
-                    });
+                    }
 
-                    // Add the request to the RequestQueue.
-                    queue.add(stringRequest);
+                    if (validForm) {
+                        final ProgressDialog pd = new ProgressDialog(getActivity());
+
+                        // Set progress dialog style spinner
+                        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+                        // Set the progress dialog title and message
+                        pd.setMessage("Fetching results");
+
+                        // Set the progress dialog background color
+                        pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD4D9D0")));
+
+                        pd.setIndeterminate(false);
+
+                        // Finally, show the progress dialog
+                        pd.show();
+
+
+                        String distance = distanceValue.getText().toString();
+                        String url = "http://travelyellowpages.us-east-2.elasticbeanstalk.com/nearbyPlaces?keyword=" + keyword + "&category=" + selectedCategory + "&distance=" + distance + "&hereLatitude=" + lat + "&hereLongitude=" + lng;
+                        Log.d("request : ", url);
+                        // Request a string response from the provided URL.
+                        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                                new Response.Listener<String>() {
+                                    @Override
+                                    public void onResponse(String response) {
+                                        // Display the first 500 characters of the response string.
+//                                    mTextView.setText("Response is: "+ response.substring(0,500));
+                                        Log.d("VolleyResponse", response);
+                                        Intent intent = new Intent(getActivity(), ResultsTable.class);
+                                        intent.putExtra(NEARBY_PLACES, response);
+
+                                        pd.dismiss();
+                                        startActivity(intent);
+                                    }
+                                }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError error) {
+//                            mTextView.setText("That didn't work!");
+                                Log.d("VolleyError", "error");
+                            }
+                        });
+
+                        // Add the request to the RequestQueue.
+                        queue.add(stringRequest);
+                    }
                 }
             });
 
@@ -260,11 +293,9 @@ public class MainActivity extends AppCompatActivity {
                     customLocText.clearFocus();
                     locationRadio.clearCheck();
                     locationRadio.check(R.id.currLocRadio);
+
                 }
             });
-
-
-
 
             return rootView;
         }
