@@ -67,6 +67,23 @@ public class ResultsTable extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+//                final ProgressDialog pd = new ProgressDialog();
+//
+//                // Set progress dialog style spinner
+//                pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+//
+//                // Set the progress dialog title and message
+//                pd.setMessage("Fetching results");
+//
+//                // Set the progress dialog background color
+//                pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD4D9D0")));
+//
+//                pd.setIndeterminate(false);
+//
+//                // Finally, show the progress dialog
+//                pd.show();
+
                 pageNum = pageNum + 1;
                 String url = "http://travelyellowpages.us-east-2.elasticbeanstalk.com/nextPage?nextPageToken=" + nextToken;
                 Log.d("request : ", url);
@@ -81,6 +98,7 @@ public class ResultsTable extends AppCompatActivity {
                                     Log.d("ADDED", "NEXT ADDED");
                                 }
                                 constructResultsTable(response, pageNum, true);
+//                                pd.dismiss();
                             }
                         }, new Response.ErrorListener() {
                     @Override

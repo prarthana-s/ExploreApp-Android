@@ -2,6 +2,7 @@ package com.example.prarthana.travelapp;
 
 import android.app.DownloadManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -31,6 +32,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -278,6 +280,14 @@ public class MainActivity extends AppCompatActivity {
 
                         // Add the request to the RequestQueue.
                         queue.add(stringRequest);
+                    }
+                    else {
+                        Context context = getActivity();
+                        CharSequence text = "Please fix all fields with errors.";
+                        int duration = Toast.LENGTH_LONG;
+
+                        Toast toast = Toast.makeText(context, text, duration);
+                        toast.show();
                     }
                 }
             });

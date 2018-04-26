@@ -70,15 +70,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.nearbyPlaceViewHol
         @Override
         public void onClick(View view)
         {
-
-
             final ProgressDialog pd = new ProgressDialog(innerFromContext);
 
             // Set progress dialog style spinner
             pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
             // Set the progress dialog title and message
-            pd.setMessage("Fetching results");
+            pd.setMessage("Fetching details");
 
             // Set the progress dialog background color
             pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD4D9D0")));
