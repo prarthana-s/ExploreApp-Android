@@ -1,7 +1,10 @@
 package com.example.prarthana.travelapp;
 
 import android.app.DownloadManager;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -162,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             Button searchButton = (Button) rootView.findViewById(R.id.searchButton);
-//            Button clearButton = (Button) rootView.findViewById(R.id.clearButton);
+            Button clearButton = (Button) rootView.findViewById(R.id.clearButton);
             final EditText keywordValue = (EditText) rootView.findViewById(R.id.keywordValue);
 //            Spinner categoryValue = (Spinner) rootView.findViewById(R.id.categoryValue);
             final EditText distanceValue = (EditText) rootView.findViewById(R.id.distanceValue);
@@ -199,6 +202,23 @@ public class MainActivity extends AppCompatActivity {
             searchButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    final ProgressDialog pd = new ProgressDialog(getActivity());
+
+                    // Set progress dialog style spinner
+                    pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+                    // Set the progress dialog title and message
+                    pd.setMessage("Fetching results");
+
+                    // Set the progress dialog background color
+                    pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD4D9D0")));
+
+                    pd.setIndeterminate(false);
+
+                    // Finally, show the progress dialog
+                    pd.show();
+
                     String keyword = keywordValue.getText().toString();
                     String distance = distanceValue.getText().toString();
                     String url ="http://travelyellowpages.us-east-2.elasticbeanstalk.com/nearbyPlaces?keyword=" + keyword + "&category=" + selectedCategory + "&distance=" + distance + "&hereLatitude=" + lat +  "&hereLongitude=" + lng;
@@ -213,6 +233,8 @@ public class MainActivity extends AppCompatActivity {
                                     Log.d("VolleyResponse", response);
                                     Intent intent = new Intent(getActivity(), ResultsTable.class);
                                     intent.putExtra(NEARBY_PLACES, response);
+
+                                    pd.dismiss();
                                     startActivity(intent);
                                 }
                             }, new Response.ErrorListener() {
@@ -225,9 +247,6 @@ public class MainActivity extends AppCompatActivity {
 
                     // Add the request to the RequestQueue.
                     queue.add(stringRequest);
-
-
-                    // Code here executes on main thread after user presses button
                 }
             });
 

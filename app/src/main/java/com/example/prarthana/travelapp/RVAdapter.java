@@ -1,10 +1,13 @@
 package com.example.prarthana.travelapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -67,6 +70,23 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.nearbyPlaceViewHol
         @Override
         public void onClick(View view)
         {
+
+
+            final ProgressDialog pd = new ProgressDialog(innerFromContext);
+
+            // Set progress dialog style spinner
+            pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+
+            // Set the progress dialog title and message
+            pd.setMessage("Fetching results");
+
+            // Set the progress dialog background color
+            pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD4D9D0")));
+
+            pd.setIndeterminate(false);
+
+            // Finally, show the progress dialog
+            pd.show();
             Integer pos = getAdapterPosition();
             String placeid = placeId;
             final RequestQueue queue = Volley.newRequestQueue(innerFromContext);
@@ -81,6 +101,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.nearbyPlaceViewHol
                             Log.d("VolleyResponse", response);
                             Intent intent = new Intent(innerFromContext, ShowAllDetails.class);
                             intent.putExtra(SELECTED_PLACE, response);
+                            pd.dismiss();
                             innerFromContext.startActivity(intent);
                         }
                         }, new Response.ErrorListener() {
