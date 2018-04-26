@@ -34,6 +34,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
+import com.seatgeek.placesautocomplete.DetailsCallback;
+import com.seatgeek.placesautocomplete.OnPlaceSelectedListener;
+import com.seatgeek.placesautocomplete.model.AutocompleteResultType;
+import com.seatgeek.placesautocomplete.model.Place;
+import com.seatgeek.placesautocomplete.model.PlaceDetails;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
     static public String selectedCategory = "default";
 
     public static final String NEARBY_PLACES = "com.example.prarthana.NEARBYPLACES";
+
+    public static com.seatgeek.placesautocomplete.PlacesAutocompleteTextView searchFromLoc;
+
+    public static String lat = null;
+    public static String lng = null;
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
      * fragments for each of the sections. We use a
@@ -158,6 +169,31 @@ public class MainActivity extends AppCompatActivity {
 //            RadioGroup locationRadio = (RadioGroup) rootView.findViewById(R.id.locRadioGroup);
 //            EditText customLocText = (EditText) rootView.findViewById(R.id.autocompLoc);
 
+            searchFromLoc = rootView.findViewById(R.id.autocompLoc);
+            searchFromLoc.setResultType(AutocompleteResultType.GEOCODE) ;
+            searchFromLoc.setLocationBiasEnabled(true);
+            searchFromLoc.setOnPlaceSelectedListener(
+                    new OnPlaceSelectedListener() {
+                        @Override
+                        public void onPlaceSelected(final Place place) {
+                            Log.d("PLACE", place.toString());
+                            searchFromLoc.getDetailsFor(place, new DetailsCallback() {
+                                @Override
+                                public void onSuccess(PlaceDetails placeDetails) {
+                                    lat = String.valueOf(placeDetails.geometry.location.lat);
+                                    lng = String.valueOf(placeDetails.geometry.location.lng);
+                                }
+
+                                @Override
+                                public void onFailure(Throwable throwable) {
+
+                                }
+                            });
+                        }
+                    }
+            );
+
+
             final RequestQueue queue = Volley.newRequestQueue(getActivity());
             System.out.println(searchButton);
             searchButton.setOnClickListener(new View.OnClickListener() {
@@ -165,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     String keyword = keywordValue.getText().toString();
                     String distance = distanceValue.getText().toString();
-                    String url ="http://travelyellowpages.us-east-2.elasticbeanstalk.com/nearbyPlaces?keyword=" + keyword + "&category=" + selectedCategory + "&distance=" + distance + "&hereLatitude=34.0266&hereLongitude=-118.2831";
+                    String url ="http://travelyellowpages.us-east-2.elasticbeanstalk.com/nearbyPlaces?keyword=" + keyword + "&category=" + selectedCategory + "&distance=" + distance + "&hereLatitude=" + lat +  "&hereLongitude=" + lng;
                     Log.d("request : ", url);
                     // Request a string response from the provided URL.
                     StringRequest stringRequest = new StringRequest(Request.Method.GET, url,

@@ -241,9 +241,10 @@ public class TabFragment4 extends Fragment {
                 String rating = review.getString("rating");
                 String timestamp = review.getString("time");
                 String reviewBody = review.getString("text");
+                String url = review.getString("author_url");
 
-                googleReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody));
-                sortedGoogleReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody));
+                googleReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody, url));
+                sortedGoogleReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody, url));
             }
 
             googleFlag = true;
@@ -323,9 +324,10 @@ public class TabFragment4 extends Fragment {
                                     String rating = review.getString("rating");
                                     String timestamp = review.getString("time_created");
                                     String reviewBody = review.getString("text");
+                                    String url = review.getString("url");
 
-                                    yelpReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody));
-                                    sortedYelpReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody));
+                                    yelpReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody, url));
+                                    sortedYelpReviews.add(new Review(userIcon, name, rating, timestamp, reviewBody, url));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -43,7 +44,7 @@ public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.revi
         this.selectedCategory = selectedCategory;
     }
 
-    public static class reviewsViewHolder extends RecyclerView.ViewHolder {
+    public static class reviewsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         CardView cv;
         ImageView reviewUserIcon;
@@ -52,16 +53,25 @@ public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.revi
         TextView reviewTime;
         TextView reviewBody;
         Context fromInnerContext;
+        String url;
 
         reviewsViewHolder(View itemView, Context fromContext) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.reviewscv);
+            cv.setOnClickListener(this);
             reviewUserIcon = (ImageView) itemView.findViewById(R.id.review_icon);
             reviewUserName = (TextView) itemView.findViewById(R.id.review_name);
             reviewUserRating = (TextView) itemView.findViewById(R.id.review_rating);
             reviewTime = (TextView) itemView.findViewById(R.id.review_time);
             reviewBody = (TextView) itemView.findViewById(R.id.review_body);
             fromInnerContext = fromContext;
+        }
+
+        @Override
+        public void onClick(View v) {
+            Integer pos = getAdapterPosition();
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+            fromInnerContext.startActivity(browserIntent);
         }
     }
 
@@ -83,7 +93,6 @@ public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.revi
         reviewsViewHolder.reviewUserRating.setText(reviewsList.get(i).getRating());
 
         String timestamp = reviewsList.get(i).getTimestamp();
-//        Log.d("selected cat:", selectedCategory);
         if (selectedCategory == "Google Reviews") {
             Date date = new Date(Long.parseLong(timestamp) * 1000);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
@@ -95,7 +104,10 @@ public class reviewsRVAdapter extends RecyclerView.Adapter<reviewsRVAdapter.revi
         }
 
         reviewsViewHolder.reviewBody.setText(reviewsList.get(i).getReviewBody());
+        reviewsViewHolder.url = reviewsList.get(i).getURL();
         Picasso.get().load(reviewsList.get(i).getUserIcon().toString()).into(reviewsViewHolder.reviewUserIcon);
+
+
     }
 
     @Override
