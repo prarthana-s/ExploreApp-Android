@@ -136,7 +136,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/autocompLoc" />
 
-    <AutoCompleteTextView
+    <!--<AutoCompleteTextView-->
+        <!--android:id="@+id/autocompLoc"-->
+        <!--android:layout_width="320dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="48dp"-->
+        <!--android:layout_marginStart="48dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:hint="Type in the Location"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/locRadioGroup" />-->
+
+    <com.seatgeek.placesautocomplete.PlacesAutocompleteTextView
         android:id="@+id/autocompLoc"
         android:layout_width="320dp"
         android:layout_height="wrap_content"
@@ -145,6 +156,7 @@
         android:layout_marginTop="8dp"
         android:hint="Type in the Location"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/locRadioGroup" />
+        app:layout_constraintTop_toBottomOf="@+id/locRadioGroup"
+        app:pacv_googleMapsApiKey="AIzaSyANFqTMYqnjkhbs9BQ5BYdd8zc2RtvzcFc"/>
 
 </android.support.constraint.ConstraintLayout>
