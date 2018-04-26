@@ -1,8 +1,11 @@
 package com.example.prarthana.travelapp;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,8 +16,16 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,9 +36,16 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.prarthana.travelapp.MainActivity.NEARBY_PLACES;
+
 public class ResultsTable extends AppCompatActivity {
 
     private RecyclerView rv;
+    String nextToken;
+    Button nextButton;
+    Button prevButton;
+    String[] resultsHistory = {"","",""};
+    Integer pageNum = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,22 +55,91 @@ public class ResultsTable extends AppCompatActivity {
         setContentView(R.layout.activity_results_table);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
+        nextButton = (Button) findViewById(R.id.nextButton);
+        prevButton = (Button) findViewById(R.id.prevButton);
+
+        nextButton.setEnabled(false);
+        prevButton.setEnabled(false);
+
+        final RequestQueue queue = Volley.newRequestQueue(this);
+
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageNum = pageNum + 1;
+                String url = "http://travelyellowpages.us-east-2.elasticbeanstalk.com/nextPage?nextPageToken=" + nextToken;
+                Log.d("request : ", url);
+                // Request a string response from the provided URL.
+                StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                        new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                Log.d("VolleyResponse", response);
+                                if (pageNum < 3) {
+                                    resultsHistory[pageNum] = response;
+                                    Log.d("ADDED", "NEXT ADDED");
+                                }
+                                constructResultsTable(response, pageNum, true);
+                            }
+                        }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+//                            mTextView.setText("That didn't work!");
+                        Log.d("VolleyError", "error");
+                    }
+                });
+
+//                 Add the request to the RequestQueue.
+                queue.add(stringRequest);
+            }
+        });
+
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageNum = pageNum - 1;
+                constructResultsTable("", pageNum, false);
+            }
+        });
+
         setSupportActionBar(toolbar);
 
-        RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
-
-        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        rv.setLayoutManager(layoutManager);
 
         Intent intent = getIntent();
-        String nearby_places_str = intent.getStringExtra(MainActivity.NEARBY_PLACES);
+        String nearby_places_str = intent.getStringExtra(NEARBY_PLACES);
+        resultsHistory[0] = nearby_places_str;
+        constructResultsTable(nearby_places_str, pageNum, true);
+    }
+
+    private void constructResultsTable(String nearby_places_str, Integer pageNum, Boolean fromNext) {
+
+        if (fromNext == false) {
+            nearby_places_str = resultsHistory[pageNum];
+            Log.d("PREV:", nearby_places_str);
+        }
 
         JSONObject reader = null;
         List<nearbyPlace> places = new ArrayList<>();
 
         try {
             reader = new JSONObject(nearby_places_str);
+            if (reader.has("next_page_token")) {
+                nextToken = reader.getString("next_page_token");
+                nextButton.setEnabled(true);
+            }
+            else {
+                nextButton.setEnabled(false);
+            }
+
+
+            if (pageNum > 0) {
+                prevButton.setEnabled(true);
+            }
+            else {
+                prevButton.setEnabled(false);
+            }
+
             JSONArray results = reader.getJSONArray("results");
 
             for (int i = 0; i < results.length(); i++) {
@@ -65,9 +152,14 @@ public class ResultsTable extends AppCompatActivity {
                 places.add(new nearbyPlace(icon, name, vicinity, placeid));
 
             }
-            } catch (JSONException e) {
+        } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        rv.setLayoutManager(layoutManager);
 
         RVAdapter adapter = new RVAdapter(places, this);
         rv.setAdapter(adapter);

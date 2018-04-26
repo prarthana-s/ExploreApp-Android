@@ -263,10 +263,9 @@ public class MainActivity extends AppCompatActivity {
                                         // Display the first 500 characters of the response string.
 //                                    mTextView.setText("Response is: "+ response.substring(0,500));
                                         Log.d("VolleyResponse", response);
+                                        pd.dismiss();
                                         Intent intent = new Intent(getActivity(), ResultsTable.class);
                                         intent.putExtra(NEARBY_PLACES, response);
-
-                                        pd.dismiss();
                                         startActivity(intent);
                                     }
                                 }, new Response.ErrorListener() {
