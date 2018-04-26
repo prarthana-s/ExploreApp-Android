@@ -66,6 +66,8 @@ public class ShowAllDetails extends AppCompatActivity {
 
         getSupportActionBar().setTitle(name);
 
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // In `OnCreate();`
+
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.addTab(tabLayout.newTab().setText("INFO"));
         tabLayout.addTab(tabLayout.newTab().setText("PHOTOS"));
@@ -126,6 +128,9 @@ public class ShowAllDetails extends AppCompatActivity {
                 Intent intent = new Intent(Intent.ACTION_VIEW,
                         Uri.parse(tweetURL));
                 startActivity(intent);
+                return true;
+            case android.R.id.home:
+                this.finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
