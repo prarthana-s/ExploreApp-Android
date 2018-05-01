@@ -1,8 +1,11 @@
 package com.example.prarthana.travelapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -13,7 +16,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,11 +31,14 @@ public class ShowAllDetails extends AppCompatActivity {
 
     static public String selectedCategory = "Google Reviews";
     static public String selectedSort = "Default Sort";
+    public static Menu copyMenu;
+    public MenuItem favIcon;
     Button twitterShare;
 
-    String name = "";
-    String website = "";
-    String address = "";
+    public String name = "";
+    public String website = "";
+    public String address = "";
+    public String placeid = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,7 +49,6 @@ public class ShowAllDetails extends AppCompatActivity {
 
         Intent intent = getIntent();
         String selected_place_str = intent.getStringExtra(RVAdapter.SELECTED_PLACE);
-        Log.d("selected place:,", selected_place_str);
 
         JSONObject reader = null;
         try {
@@ -51,6 +58,8 @@ public class ShowAllDetails extends AppCompatActivity {
             name = results.getString("name");
 
             address = results.getString("formatted_address");
+
+            placeid = results.getString("place_id");
 
             if (results.has("website")) {
                 website = results.getString("website");
@@ -75,13 +84,6 @@ public class ShowAllDetails extends AppCompatActivity {
         tabLayout.addTab(tabLayout.newTab().setText("REVIEWS"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
-//        twitterShare = (Button) findViewById(R.id.twitterShare);
-//        twitterShare.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.d("CLICKED!", "clickedddd!");
-//            }
-//        });
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         final PagerAdapter adapter = new PagerAdapter
@@ -110,6 +112,25 @@ public class ShowAllDetails extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_details, menu);
+        favIcon = menu.findItem(R.id.detailsFavIcon);
+        copyMenu = menu;
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String isInSharedPref = preferences.getString(placeid, "");
+
+        if(isInSharedPref != null && !isInSharedPref.isEmpty()) {
+            ImageView imageView = new ImageView(this);
+            imageView.setMaxHeight(18);
+            imageView.setMaxWidth(18);
+            imageView.setImageResource(R.drawable.heart_fill_white);
+            favIcon.setActionView(imageView);
+        }
+        else {
+            ImageView imageView = new ImageView(this);
+            imageView.setImageResource(R.drawable.heart_outline_white);
+            favIcon.setActionView(imageView);
+        }
+
         return true;
     }
 
@@ -129,6 +150,7 @@ public class ShowAllDetails extends AppCompatActivity {
                         Uri.parse(tweetURL));
                 startActivity(intent);
                 return true;
+
             case android.R.id.home:
                 this.finish();
                 return true;

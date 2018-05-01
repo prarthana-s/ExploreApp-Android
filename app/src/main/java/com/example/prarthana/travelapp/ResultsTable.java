@@ -2,6 +2,7 @@ package com.example.prarthana.travelapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -172,8 +174,19 @@ public class ResultsTable extends AppCompatActivity {
                 String name = c.getString("name");
                 String vicinity = c.getString("vicinity");
                 String placeid = c.getString("place_id");
+                Boolean isFav;
 
-                places.add(new nearbyPlace(icon, name, vicinity, placeid));
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                String isInSharedPref = preferences.getString(placeid, "");
+
+                if(isInSharedPref != null && !isInSharedPref.isEmpty()) {
+                    isFav = true;
+                }
+                else {
+                    isFav = false;
+                }
+
+                places.add(new nearbyPlace(icon, name, vicinity, placeid, reader, isFav));
 
             }
         } catch (JSONException e) {

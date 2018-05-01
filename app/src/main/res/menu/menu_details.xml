@@ -7,9 +7,13 @@
         android:orderInCategory="100"
         android:title="Twitter"
         app:showAsAction="always" />
-<item
+    <item
     android:id="@+id/place_title"
     android:title="Settings">
 </item>
+    <item
+        android:id="@+id/detailsFavIcon"
+        android:orderInCategory="101"
+        app:showAsAction="always" />
 
 </menu>
